@@ -10,6 +10,4 @@ app.config['SECRET_KEY'] = Config.SECRET_KEY
 app.config['SQLALCHEMY_TRACK_MODIFICATION'] = False
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
-
-if __name__ == "__main__":
-    app.run(debug=True)
+print(Config.SECRET_KEY)
