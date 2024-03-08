@@ -32,6 +32,7 @@ def upgrade():
     sa.PrimaryKeyConstraint('Id'),
     sa.UniqueConstraint('Email')
     )
+
     # ### end Alembic commands ###
 
 
