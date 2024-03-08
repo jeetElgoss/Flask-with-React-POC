@@ -12,13 +12,4 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
 # calling models here
-# from .models.article_model import *
-
-import datetime
-
-
-class TArticle(db.Model):
-    Id = db.Column(db.Integer, primary_key=True)
-    Title = db.Column(db.String(100))
-    Description = db.Column(db.Text)
-    CreatedOn = db.Column(db.DateTime, default=datetime.datetime.now())
+from .models.article_model import *
