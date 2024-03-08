@@ -1,5 +1,5 @@
-from package import app
-from Backend.package import routes
+from package import app, db
+from package import routes
 
 # Register blueprints
 app.register_blueprint(routes.article_bp, url_prefix='/')

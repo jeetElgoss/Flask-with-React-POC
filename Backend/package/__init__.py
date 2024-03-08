@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from Backend.config import Config
+from .config import Config
 from flask_migrate import Migrate
 
 # instantiating flask object
@@ -10,4 +10,15 @@ app.config['SECRET_KEY'] = Config.SECRET_KEY
 app.config['SQLALCHEMY_TRACK_MODIFICATION'] = False
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
-print(Config.SECRET_KEY)
+
+# calling models here
+# from .models.article_model import *
+
+import datetime
+
+
+class TArticle(db.Model):
+    Id = db.Column(db.Integer, primary_key=True)
+    Title = db.Column(db.String(100))
+    Description = db.Column(db.Text)
+    CreatedOn = db.Column(db.DateTime, default=datetime.datetime.now())
