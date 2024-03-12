@@ -1,15 +1,19 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
+from .extensions import db, migrate, marsh
 from .config import Config
-from flask_migrate import Migrate
 
-# instantiating flask object
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = Config.DATABASE_URL
-app.config['SECRET_KEY'] = Config.SECRET_KEY
-app.config['SQLALCHEMY_TRACK_MODIFICATION'] = False
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
 
-# calling models here
-from .models.article_model import *
+def create_app():
+    app = Flask(__name__)
+    app.config['SQLALCHEMY_DATABASE_URI'] = Config.DATABASE_URL
+    app.config['SECRET_KEY'] = Config.SECRET_KEY
+    app.config['SQLALCHEMY_TRACK_MODIFICATION'] = False
+    db.init_app(app)
+    migrate.init_app(app, db)
+    marsh.init_app(app)
+    # calling models here
+
+    from .models.article_model import Article
+    from .models.user_model import User
+
+    return app

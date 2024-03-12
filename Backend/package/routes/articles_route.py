@@ -1,14 +1,14 @@
 # Articles_route.py
-from flask import Blueprint
 
-article_bp = Blueprint('articles', __name__)
+from flask import url_for, redirect, Blueprint
+from ..models.article_model import Article, articles_schema, article_schema
+from flask import jsonify
 
-
-@article_bp.route('/')
-def home():
-    return 'Hello, welcome to the test home page!'
+article_bp = Blueprint('article', __name__)
 
 
-@article_bp.route('/about')
-def about():
-    return 'This is the test about page.'
+@article_bp.route('/', methods=['GET', 'POST'])
+def index():
+    records = Article.query.all()
+    result = articles_schema.dump(records)
+    return jsonify(result)
