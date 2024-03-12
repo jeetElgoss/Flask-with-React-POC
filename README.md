@@ -20,4 +20,5 @@ pip install flask_marshmallow
 pip install flask_migrate
 pip install marshmallow-sqlalchemy
 
-
+# Add git ignore 
+touch .gitignore
