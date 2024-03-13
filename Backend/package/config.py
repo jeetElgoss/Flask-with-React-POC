@@ -9,4 +9,3 @@ class Config:
     DATABASE_URL = os.getenv("DATABASE_URI")
     SECRET_KEY = os.getenv("SECRET_KEY")
 
-

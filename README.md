@@ -1,7 +1,7 @@
 # Flask-with-React-POC
 
 # Create a virtual environment
-pyhton -m venv "virtual environment name"
+python -m venv "virtual environment name"
 
 # To update virtual environment
 pip install -r requirements.txt --upgrade
@@ -22,3 +22,18 @@ pip install marshmallow-sqlalchemy
 
 # Add git ignore 
 touch .gitignore
+
+# Access data from post request
+1- This is used to access form data that is submitted via an HTML form using the POST method  
+    request.get_form['description']
+    title = data.get('title')
+2- This is used to access JSON data sent in the request body. It is typically associated with HTTP requests that have
+    a Content-Type of application/json.
+    data = request.get_json()
+    title = data.get('title')
+
+# Access the query parameters in flask
+    http://127.0.0.1:5000/get_article_by_id/search?author_name="Jeet"&category="flask"
+    author_name = request.args.get('author_name')
+    category_name = request.args.get('category')
+    
