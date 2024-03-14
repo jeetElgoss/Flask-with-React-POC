@@ -1,4 +1,4 @@
-# __init__
+# __init__ package directory
 
 from flask import Flask
 from .extensions import db, migrate, marsh

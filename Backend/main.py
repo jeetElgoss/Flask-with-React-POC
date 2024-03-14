@@ -6,10 +6,12 @@ from package.routes.articles_route import article_bp
 app = create_app()
 app.register_blueprint(article_bp)
 
+"""This is primary route, which will run when user visit http://127.0.0.1:5000/"""
 
-def close_db_connection(db):
-    if db:
-        db.close()
+
+@app.route("/")
+def index():
+    return "<center></h2>Welcome to my platform.</h2></center>"
 
 
 if __name__ == "__main__":

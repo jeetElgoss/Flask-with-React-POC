@@ -4,3 +4,4 @@
 
 # Ignore all files in the "venv" directory
 venv
+/front-end/node_modules

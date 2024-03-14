@@ -37,3 +37,17 @@ touch .gitignore
     author_name = request.args.get('author_name')
     category_name = request.args.get('category')
     
+# How to start to work Reactjs
+    npx create-react-app app_name
+                or
+    npm init react-app my-app
+
+# TO run Reatjs app
+npm start
+
+# Bundles the app into static files for production.
+npm run build
+
+# Starts the test runner.
+npm test
+
