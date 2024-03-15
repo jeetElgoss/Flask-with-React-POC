@@ -1,6 +1,6 @@
 # articles_route.py
 
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, request
 from ..services.article_services import ArticleService
 
 article_bp = Blueprint('article', __name__)

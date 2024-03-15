@@ -18,7 +18,7 @@ class ArticleService:
                 result = articles_schema.dump(records)
                 return jsonify({"data": result, "status_code": 200, "timestamp": timestamp}), 200
             else:
-                return jsonify({"data": "No record available.", "status_code": 404, "timestamp": timestamp}), 404
+                return jsonify({"message": "No record available.", "status_code": 404, "timestamp": timestamp}), 404
         except Exception as ex:
             return self.handle_error(ex)
 
@@ -31,7 +31,7 @@ class ArticleService:
             article = Article(Title=title, Description=description, CreatedOn=created_on)
             db.session.add(article)
             db.session.commit()
-            return jsonify({"data": "Article added successfully.", "status_code": 200, "timestamp": timestamp}), 200
+            return jsonify({"message": "Article added successfully.", "status_code": 200, "timestamp": timestamp}), 200
         except Exception as ex:
             db.session.rollback()
             return self.handle_error(ex)
@@ -44,7 +44,7 @@ class ArticleService:
                 result = article_schema.dump(article_data)
                 return jsonify({"data": result, "status_code": 200}), 200
             else:
-                return jsonify({"data": f"No data found with article Id {article_id}.", "status_code": 404,
+                return jsonify({"message": f"No data found with article Id {article_id}.", "status_code": 404,
                                 "timestamp": timestamp}), 404
         except Exception as ex:
             return self.handle_error(ex)
@@ -59,9 +59,9 @@ class ArticleService:
                 article_data.CreatedOn = json_data.get('created_on')
                 db.session.commit()
                 return jsonify(
-                    {"data": "Article updated successfully", "status_code": 200, "timestamp": timestamp}), 200
+                    {"message": "Article updated successfully", "status_code": 200, "timestamp": timestamp}), 200
             else:
-                return jsonify({"data": f"No data found with article Id {article_id}.", "status_code": 404,
+                return jsonify({"message": f"No data found with article Id {article_id}.", "status_code": 404,
                                 "timestamp": timestamp}), 404
         except Exception as ex:
             return self.handle_error(ex)
@@ -74,14 +74,16 @@ class ArticleService:
                 db.session.delete(article_data)
                 db.session.commit()
                 return jsonify(
-                    {"data": "Article deleted successfully", "status_code": 200, "timestamp": timestamp}), 200
+                    {"data": True, "message": "Article deleted successfully", "status_code": 200,
+                     "timestamp": timestamp}), 200
             else:
-                return jsonify({"data": f"No data found with article Id {article_id}.", "status_code": 404,
-                                "timestamp": timestamp}), 404
+                return jsonify(
+                    {"data": False, "message": f"No data found with article Id {article_id}.", "status_code": 404,
+                     "timestamp": timestamp}), 404
         except Exception as ex:
             return self.handle_error(ex)
 
     def handle_error(self, ex):
         """Handle errors."""
         error_message = f"There is a problem in endpoint: {ex}"
-        return jsonify({"data": error_message, "status_code": 500, "timestamp": timestamp}), 500
+        return jsonify({"message": error_message, "status_code": 500, "timestamp": timestamp}), 500
