@@ -37,3 +37,5 @@ def update_article(article_id):
 def delete_article(article_id):
     """Delete article by ID."""
     return article_obj.delete_article(article_id)
+
+
