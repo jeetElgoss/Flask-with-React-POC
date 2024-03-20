@@ -12,6 +12,9 @@ class User(db.Model):
     CreatedOn = db.Column(db.DateTime, default=datetime.now())
 
 
+user_model = User()
+
+
 class UserSchema(marsh.Schema):
     class Meta:
         fields = ('Id', 'PublicId', 'Email', 'Password', 'CreatedOn')

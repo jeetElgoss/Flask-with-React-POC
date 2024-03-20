@@ -1,6 +1,6 @@
 from sqlalchemy.exc import IntegrityError
-from ..models.user_model import User, user_schema, users_schema
-from .. import db, create_app
+from Backend.package.models.user_model import User, user_schema, users_schema
+from Backend.package import db, create_app
 from flask import jsonify
 from datetime import datetime, timedelta
 import uuid
@@ -29,9 +29,17 @@ class UserService:
     def add_user(self, json_data):
         """Add new user."""
         try:
+            if "email" not in json_data or "password" not in json_data:
+                return jsonify({"error": "Email and password are required fields.", "status_code": 400,
+                                "timestamp": timestamp}), 400
+
             public_id = str(uuid.uuid4())
-            email = json_data.get("email")
-            password = json_data.get("password")
+            email = json_data["email"]
+            password = json_data["password"]
+            if not email or not password:
+                return jsonify(
+                    {"error": "Email and password cannot be empty.", "status_code": 400, "timestamp": timestamp}), 400
+
             hash_password = generate_password_hash(password)
             new_user = User(PublicId=public_id, Email=email, Password=hash_password)
             db.session.add(new_user)
@@ -93,24 +101,27 @@ class UserService:
             return self.handle_error(ex)
 
     def login(self, auth):
-        if not auth or not auth.username or not auth.password:
-            return jsonify({"message": "Could not verify.", "status_code": 401,
-                            "WWW-Authenticate": '"Basic realm"="Login required."'})
-        user = User.query.filter_by(Email=auth.username).first()
-        if not user:
-            return jsonify({"message": "Could not verify.", "status_code": 401,
-                            "WWW-Authenticate": '"Basic realm"="Login required."'})
-        if check_password_hash(user.Password, auth.password):
-            # Replace 'app.config['SECRET_KEY']' with your actual secret key
+        try:
+            if not auth or not auth.username or not auth.password:
+                return jsonify({"message": "Invalid credentials.", "status_code": 401, "timestamp": timestamp}), 401
+
+            user = User.query.filter_by(Email=auth.username).first()
+            if not user:
+                return jsonify({"message": "User not found.", "status_code": 401, "timestamp": timestamp}), 401
+
+            if not check_password_hash(user.Password, auth.password):
+                return jsonify({"message": "Incorrect password.", "status_code": 401, "timestamp": timestamp}), 401
+
             token = jwt.encode({'PublicId': user.PublicId, 'exp': datetime.now() + timedelta(minutes=30)},
-                               app.config['SECRET_KEY'])
-            print(f"{token}")
-            # Decoding the token to convert from bytes to string
-            return jsonify({"token": token.decode('UTF-8')})
-        return jsonify({"message": "Could not verify.", "status_code": 401,
-                        "WWW-Authenticate": '"Basic realm"="Login required."'})
+                               app.config['SECRET_KEY'], algorithm='HS256')
+
+            return jsonify({"token": token.decode('UTF-8'), "status_code": 200, "timestamp": timestamp}), 200
+
+        except Exception as ex:
+            # Handle any unexpected errors gracefully
+            return self.handle_error(ex)
 
     def handle_error(self, ex):
         """Handle errors."""
         error_message = f"There is a problem in endpoint: {ex}"
-        return jsonify({"message": error_message, "status_code": 500, "timestamp": timestamp}), 500
+        return jsonify({"message": error_message, "timestamp": timestamp, "status_code": 500}), 500
